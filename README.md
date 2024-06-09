@@ -1,7 +1,5 @@
 ## Chess Laravel
 
----
-
 Set up to use a [Laravel](https://laravel.com/) backend and a [Vue](https://vuejs.org/) frontend,
 glued together with [Inertia](https://inertiajs.com/) and compiled by [Vite](https://vitejs.dev/).
 
