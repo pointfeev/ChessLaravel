@@ -1,0 +1,5 @@
+@import 'figtree.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
