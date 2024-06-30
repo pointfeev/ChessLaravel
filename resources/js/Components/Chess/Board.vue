@@ -44,12 +44,13 @@ function select(position) {
 
 let debounce = false;
 
-function click(position, isPiece) {
+function click(position) {
     if (debounce) {
         return;
     }
+    let piece = pieces.value[position];
     if (selection == null) {
-        if (isPiece) {
+        if (piece != null) {
             select(position);
         }
         return;
@@ -58,7 +59,8 @@ function click(position, isPiece) {
         select();
         return;
     }
-    if (pieces.value[position].color === pieces.value[selection].color) {
+    let selectedPiece = pieces.value[selection];
+    if (piece != null && piece.color === selectedPiece.color) {
         select(position);
         return;
     }
@@ -99,8 +101,8 @@ defineExpose({update});
                  -->
                 <template v-for='p in 64' :key='p'>
                     <Piece v-if='pieces[p]' :color='pieces[p].color' :type='pieces[p].type'
-                           @dragstart.prevent @click='click(p, true)'/>
-                    <div v-else @click='click(p, false)'/>
+                           @dragstart.prevent @click='click(p)'/>
+                    <div v-else @click='click(p)'/>
                 </template>
             </div>
         </div>
