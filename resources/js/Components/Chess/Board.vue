@@ -37,7 +37,7 @@ function select(position) {
         highlighted = null;
         return;
     }
-    highlighted = container.value.querySelector('#squares div[data-position=\'' + position + '\']')
+    highlighted = container.value.querySelector('#squares :nth-child(' + position + ')')
     highlighted.classList.replace('square-even', 'square-even-selected');
     highlighted.classList.replace('square-odd', 'square-odd-selected');
 }
@@ -56,6 +56,10 @@ function click(position, isPiece) {
     }
     if (selection === position) {
         select();
+        return;
+    }
+    if (pieces.value[position].color === pieces.value[selection].color) {
+        select(position);
         return;
     }
     debounce = true;
@@ -83,23 +87,20 @@ defineExpose({update});
 
 <template>
     <div ref='container' class='relative w-full h-full select-none'>
-        <div id='board' class='absolute rounded-xl shadow overflow-hidden'>
+        <div v-if="boardSize !== '0rem'" id='board' class='absolute rounded shadow overflow-hidden'>
             <div id='squares' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
-                <div v-for='n in 64' :data-position='n'
-                     :class="n % 2 === (Math.ceil(n / 8) % 2 === 0 ? 1 : 0) ? 'square-odd' : 'square-even'"/>
+                <div v-for='p in 64'
+                     :class="p % 2 === (Math.ceil(p / 8) % 2 === 0 ? 1 : 0) ? 'square-odd' : 'square-even'"/>
             </div>
             <div v-if='pieces' id='pieces' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
                 <!--
                     TODO: convert iteration to (item, index) in items
                           and figure out how to position them manually?
                  -->
-                <template v-for='n in 64' :key='n'>
-                    <Piece v-if='pieces[n]' :data-position='n'
-                           :color='pieces[n][0]' :data-color='pieces[n][0]'
-                           :type='pieces[n][1]' :data-type='pieces[n][1]'
-                           @dragstart.prevent @click='click(n, true)'/>
-                    <div v-else :data-position='n'
-                         @click='click(n, false)'/>
+                <template v-for='p in 64' :key='p'>
+                    <Piece v-if='pieces[p]' :color='pieces[p].color' :type='pieces[p].type'
+                           @dragstart.prevent @click='click(p, true)'/>
+                    <div v-else @click='click(p, false)'/>
                 </template>
             </div>
         </div>

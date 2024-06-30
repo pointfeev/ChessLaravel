@@ -34,28 +34,28 @@ class GameState extends Model
         $data = array();
 
         $pieces = array();
-        $pieces[1] = ['white', 'rook'];
-        $pieces[2] = ['white', 'knight'];
-        $pieces[3] = ['white', 'bishop'];
-        $pieces[4] = ['white', 'queen'];
-        $pieces[5] = ['white', 'king'];
-        $pieces[6] = ['white', 'bishop'];
-        $pieces[7] = ['white', 'knight'];
-        $pieces[8] = ['white', 'rook'];
+        $pieces[1] = array('color' => 'white', 'type' => 'rook');
+        $pieces[2] = array('color' => 'white', 'type' => 'knight');
+        $pieces[3] = array('color' => 'white', 'type' => 'bishop');
+        $pieces[4] = array('color' => 'white', 'type' => 'queen');
+        $pieces[5] = array('color' => 'white', 'type' => 'king');
+        $pieces[6] = array('color' => 'white', 'type' => 'bishop');
+        $pieces[7] = array('color' => 'white', 'type' => 'knight');
+        $pieces[8] = array('color' => 'white', 'type' => 'rook');
         for ($n = 9; $n <= 16; $n++) {
-            $pieces[$n] = ['white', 'pawn'];
+            $pieces[$n] = array('color' => 'white', 'type' => 'pawn');
         }
         for ($n = 49; $n <= 56; $n++) {
-            $pieces[$n] = ['black', 'pawn'];
+            $pieces[$n] = array('color' => 'black', 'type' => 'pawn');
         }
-        $pieces[57] = ['black', 'rook'];
-        $pieces[58] = ['black', 'knight'];
-        $pieces[59] = ['black', 'bishop'];
-        $pieces[60] = ['black', 'queen'];
-        $pieces[61] = ['black', 'king'];
-        $pieces[62] = ['black', 'bishop'];
-        $pieces[63] = ['black', 'knight'];
-        $pieces[64] = ['black', 'rook'];
+        $pieces[57] = array('color' => 'black', 'type' => 'rook');
+        $pieces[58] = array('color' => 'black', 'type' => 'knight');
+        $pieces[59] = array('color' => 'black', 'type' => 'bishop');
+        $pieces[60] = array('color' => 'black', 'type' => 'queen');
+        $pieces[61] = array('color' => 'black', 'type' => 'king');
+        $pieces[62] = array('color' => 'black', 'type' => 'bishop');
+        $pieces[63] = array('color' => 'black', 'type' => 'knight');
+        $pieces[64] = array('color' => 'black', 'type' => 'rook');
         $data['pieces'] = $pieces;
 
         $this->setData($data);
@@ -79,8 +79,8 @@ class GameState extends Model
         if (!isset($pieces[$to])) {
             return true;
         }
-        if ($pieces[$from][0] == $pieces[$to][0]) {
-            return false; // same color
+        if ($pieces[$from]['color'] == $pieces[$to]['color']) {
+            return false;
         }
         return true;
     }
