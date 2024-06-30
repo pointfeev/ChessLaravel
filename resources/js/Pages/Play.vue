@@ -1,8 +1,8 @@
 <script setup>
 import {ref} from 'vue';
 import Layout from '@/Layout/Layout.vue';
-import {Link} from '@inertiajs/vue3';
-import Board from '@/Components/Board.vue';
+import NavLink from '@/Components/Layout/NavLink.vue';
+import Board from '@/Components/Chess/Board.vue';
 
 defineProps(['state']);
 const board = ref(null);
@@ -20,9 +20,9 @@ function reset() {
 
 <template>
     <Layout title='Play'>
-        <template v-slot:navigation>
-            <Link :href="route('welcome')">Back</Link>
-            <Link href='#' onclick='return false' @click='reset'>Reset</Link>
+        <template v-slot:header>
+            <NavLink :href="route('welcome')">Back</NavLink>
+            <NavLink href='#' onclick='return false' @click='reset'>Reset</NavLink>
         </template>
         <Board ref='board' :state='state'/>
     </Layout>

@@ -1,12 +1,12 @@
 <script setup>
 import Layout from '@/Layout/Layout.vue';
-import {Link} from '@inertiajs/vue3';
+import NavLink from '@/Components/Layout/NavLink.vue';
 </script>
 
 <template>
     <Layout title='Welcome'>
-        <template v-slot:navigation>
-            <Link :href="route('play')">Play</Link>
+        <template v-slot:header>
+            <NavLink :href="route('play')">Play</NavLink>
         </template>
     </Layout>
 </template>

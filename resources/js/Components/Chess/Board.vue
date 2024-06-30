@@ -1,6 +1,6 @@
 <script setup>
 import {ref, onMounted, onUnmounted} from 'vue';
-import Piece from '@/Components/Piece.vue';
+import Piece from '@/Components/Chess/Piece.vue';
 
 const container = ref(null);
 const boardSize = ref('150rem');
