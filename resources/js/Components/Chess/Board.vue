@@ -92,12 +92,13 @@ defineExpose({update});
         <div v-if="boardSize !== '0rem'" id='board' class='absolute rounded shadow overflow-hidden'>
             <div id='squares' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
                 <div v-for='p in 64'
-                     :class="p % 2 === (Math.ceil(p / 8) % 2 === 0 ? 1 : 0) ? 'square-odd' : 'square-even'"/>
+                     :class="p % 2 === Math.ceil(p / 8) % 2 ? 'square-even' : 'square-odd'"/>
             </div>
             <div v-if='pieces' id='pieces' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
                 <!--
                     TODO: convert iteration to (item, index) in items
-                          and figure out how to position them manually?
+                          and figure out how to position them manually
+                          as to allow dragging?
                  -->
                 <template v-for='p in 64' :key='p'>
                     <Piece v-if='pieces[p]' :color='pieces[p].color' :type='pieces[p].type'
