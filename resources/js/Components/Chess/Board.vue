@@ -22,7 +22,7 @@ onUnmounted(() => {
 });
 
 const {state} = defineProps(['state']);
-const pieces = ref(state.pieces);
+const pieces = ref(state['pieces']);
 
 let selection = null;
 let highlighted = null;
@@ -75,7 +75,7 @@ function click(position, isPiece) {
 
 function update(state) {
     select();
-    pieces.value = state.pieces;
+    pieces.value = state['pieces'];
 }
 
 defineExpose({update});
