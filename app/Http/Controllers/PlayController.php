@@ -31,7 +31,7 @@ class PlayController
     public function index(): Response
     {
         return Inertia::render('Play', [
-            'state' => $this->getGameState(true)->getData()
+            'state' => $this->getGameState(true)->getViewData()
         ]);
     }
 
@@ -47,7 +47,7 @@ class PlayController
         $gameState->reset();
         return response()->json([
             'success' => true,
-            'state' => $gameState->getData()
+            'state' => $gameState->getViewData()
         ]);
     }
 
@@ -75,7 +75,7 @@ class PlayController
         $gameState->setData($data);
         return response()->json([
             'success' => true,
-            'state' => $gameState->getData()
+            'state' => $gameState->getViewData()
         ]);
     }
 }

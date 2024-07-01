@@ -12,7 +12,7 @@ class GameState extends Model
     protected $table = 'state';
     protected $primaryKey = 'uuid';
 
-    public function getData(): mixed
+    public function getData(): array
     {
         return json_decode($this->getAttribute('data'), true);
     }
@@ -61,27 +61,65 @@ class GameState extends Model
         $this->setData($data);
     }
 
+    public function getViewData(): array
+    {
+        return array_merge($this->getData(), array(
+            'moves' => $this->getAllValidMoves()
+        ));
+    }
+
     public function isValidMove(int $from, int $to): bool
     {
-        if ($from == $to) {
-            return false;
+        $moves = $this->getValidMoves($from);
+        return in_array($to, $moves);
+    }
+
+    public function getAllValidMoves(): array
+    {
+        $moves = array();
+        for ($p = 1; $p <= 64; $p++) {
+            $moves[$p] = $this->getValidMoves($p);
         }
+        return $moves;
+    }
+
+    public function getValidMoves(int $from): array
+    {
+        $moves = array();
+
         $data = $this->getData();
         $pieces = $data['pieces'];
         if (!isset($pieces[$from])) {
-            return false;
+            return $moves;
         }
-        // TODO: return false if the specific piece type doesn't permit the move here.
-        //       may want to create a method to get all possible moves for a piece type
-        //       and send that to the front-end, or request it each time? idk yet.
-        //       may also want to perform the rest of the logic following this comment
-        //       from where we check the specific piece type movement as well.
-        if (!isset($pieces[$to])) {
-            return true;
+
+        switch ($pieces[$from]['type']) {
+            case 'king':
+                // TODO
+                break;
+            case 'queen':
+                // TODO
+                break;
+            case 'rook':
+                // TODO
+                break;
+            case 'bishop':
+                // TODO
+                break;
+            case 'knight':
+                // TODO
+                break;
+            case 'pawn':
+                // TODO
+                break;
         }
-        if ($pieces[$from]['color'] == $pieces[$to]['color']) {
-            return false;
+
+        for ($p = 1; $p <= 64; $p++) { // TODO: temporary for testing, remove
+            if (!isset($pieces[$p]) || $pieces[$p]['color'] != $pieces[$from]['color']) {
+                $moves[] = $p;
+            }
         }
-        return true;
+
+        return $moves;
     }
 }

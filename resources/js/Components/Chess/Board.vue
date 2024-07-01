@@ -23,6 +23,7 @@ onUnmounted(() => {
 
 const {state} = defineProps(['state']);
 const pieces = ref(state['pieces']);
+let moves = state['moves'];
 
 let selection = null;
 let highlighted = null;
@@ -59,9 +60,12 @@ function click(position) {
         select();
         return;
     }
-    let selectedPiece = pieces.value[selection];
-    if (piece != null && piece.color === selectedPiece.color) {
-        select(position);
+    if (!moves[selection].includes(position)) {
+        let selectedPiece = pieces.value[selection];
+        if (piece != null && piece.color === selectedPiece.color) {
+            select(position);
+            return;
+        }
         return;
     }
     debounce = true;
@@ -82,6 +86,7 @@ function click(position) {
 function update(state) {
     select();
     pieces.value = state['pieces'];
+    moves = state['moves'];
 }
 
 defineExpose({update});
