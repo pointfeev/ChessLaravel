@@ -60,8 +60,8 @@ function click(position) {
         select();
         return;
     }
+    let selectedPiece = pieces.value[selection];
     if (!moves[selection].includes(position)) {
-        let selectedPiece = pieces.value[selection];
         if (piece != null && piece.color === selectedPiece.color) {
             select(position);
             return;
@@ -75,13 +75,13 @@ function click(position) {
     }).then(response => {
         let data = response.data;
         if (!data.success) {
-            return;
+            // TODO: error notification?
         }
         update(data.state);
     }).finally(() => {
         debounce = false;
     });
-    pieces.value[position] = pieces.value[selection];
+    pieces.value[position] = selectedPiece;
     pieces.value[selection] = null;
     select();
 }
