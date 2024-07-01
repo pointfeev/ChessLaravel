@@ -117,6 +117,8 @@ class GameState extends Model
                 return array(); // TODO
             case 'pawn':
                 return PawnBehavior::getValidMoves($pieces, $from);
+            default:
+                return array();
         }
     }
 }
