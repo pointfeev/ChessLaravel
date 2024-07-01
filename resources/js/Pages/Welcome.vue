@@ -5,6 +5,8 @@ import NavLink from '@/Components/Layout/NavLink.vue';
 
 <template>
     <Layout title='Welcome'>
+        <!-- TODO: convert to full page option menu -->
+
         <template v-slot:header>
             <NavLink :href="route('play')">Play</NavLink>
         </template>
