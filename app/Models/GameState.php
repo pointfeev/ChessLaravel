@@ -104,21 +104,14 @@ class GameState extends Model
             return array();
         }
 
-        switch ($pieces[$from]['type']) {
-            case 'king':
-                return array(); // TODO
-            case 'queen':
-                return array(); // TODO
-            case 'rook':
-                return array(); // TODO
-            case 'bishop':
-                return array(); // TODO
-            case 'knight':
-                return array(); // TODO
-            case 'pawn':
-                return PawnBehavior::getValidMoves($pieces, $from);
-            default:
-                return array();
-        }
+        return match ($pieces[$from]['type']) {
+            'king' => array(), // TODO
+            'queen' => array(), // TODO
+            'rook' => array(), // TODO
+            'bishop' => array(), // TODO
+            'knight' => array(), // TODO
+            'pawn' => PawnBehavior::getValidMoves($pieces, $from),
+            default => array()
+        };
     }
 }
