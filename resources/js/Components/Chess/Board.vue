@@ -81,6 +81,9 @@ function click(position) {
     }).finally(() => {
         debounce = false;
     });
+    pieces.value[position] = pieces.value[selection];
+    pieces.value[selection] = null;
+    select();
 }
 
 function update(state) {
