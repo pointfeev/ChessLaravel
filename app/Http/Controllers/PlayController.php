@@ -59,6 +59,7 @@ class PlayController
         $data = $gameState->getData();
         $data['pieces'][$to] = $data['pieces'][$from];
         unset($data['pieces'][$from]);
+        $data['turn']++;
         $gameState->setData($data);
         return response()->json([
             'success' => true,

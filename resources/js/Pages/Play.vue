@@ -27,6 +27,8 @@ function reset() {
 
 <template>
     <Layout title='Play'>
+        <!-- TODO: add turn display -->
+
         <template v-slot:header>
             <NavLink :href="route('welcome')">Back</NavLink>
             <NavLink href='#' onclick='return false' @click='reset'>Reset</NavLink>

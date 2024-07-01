@@ -33,6 +33,7 @@ function select(position) {
     if (highlighted != null) {
         highlighted.classList.replace('square-even-selected', 'square-even');
         highlighted.classList.replace('square-odd-selected', 'square-odd');
+        highlighted = null;
     }
     while (hinted.length > 0) {
         const hint = hinted.pop();
@@ -41,7 +42,12 @@ function select(position) {
 
     selection = position;
     if (position == null) {
-        highlighted = null;
+        return;
+    }
+
+    const validMoves = moves[position];
+    if (validMoves == null || validMoves.length < 1) {
+        selection = null;
         return;
     }
 
@@ -49,7 +55,6 @@ function select(position) {
     highlighted.classList.replace('square-even', 'square-even-selected');
     highlighted.classList.replace('square-odd', 'square-odd-selected');
 
-    const validMoves = moves[position];
     for (const key in validMoves) {
         const movePosition = validMoves[key];
         const square = container.value.querySelector('#squares :nth-child(' + movePosition + ')');
@@ -68,9 +73,8 @@ function click(position) {
         return;
     }
 
-    const piece = pieces.value[position];
     if (selection == null) {
-        if (piece != null) {
+        if (pieces.value[position] != null) {
             select(position);
         }
         return;
@@ -81,12 +85,8 @@ function click(position) {
         return;
     }
 
-    const selectedPiece = pieces.value[selection];
     if (!moves[selection].includes(position)) {
-        if (piece != null && piece.color === selectedPiece.color) {
-            select(position);
-            return;
-        }
+        select(position);
         return;
     }
 
@@ -104,7 +104,7 @@ function click(position) {
         debounce = false;
     });
 
-    pieces.value[position] = selectedPiece;
+    pieces.value[position] = pieces.value[selection];
     pieces.value[selection] = null;
     select();
 }

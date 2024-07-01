@@ -12,9 +12,9 @@ class PawnBehavior extends PieceBehavior
 
         list($fromX, $fromY) = self::getXYFromPosition($from);
         $color = $pieces[$from]['color'];
-        $dirY = $color == 'white' ? 1 : -1;
+        $dirY = $color == 'black' ? 1 : -1;
 
-        $startY = $color == 'white' ? 1 : 6;
+        $startY = $color == 'black' ? 1 : 6;
         $maxCount = $fromY == $startY ? 2 : 1;
         $positions = self::getPositionsInDirection($fromX, $fromY, 0, $dirY, $maxCount);
         foreach ($positions as $position) {

@@ -51,29 +51,31 @@ class GameState extends Model
     {
         $data = array();
 
+        $data['turn'] = 0;
+
         $pieces = array();
-        $pieces[1] = array('color' => 'white', 'type' => 'rook');
-        $pieces[2] = array('color' => 'white', 'type' => 'knight');
-        $pieces[3] = array('color' => 'white', 'type' => 'bishop');
-        $pieces[4] = array('color' => 'white', 'type' => 'queen');
-        $pieces[5] = array('color' => 'white', 'type' => 'king');
-        $pieces[6] = array('color' => 'white', 'type' => 'bishop');
-        $pieces[7] = array('color' => 'white', 'type' => 'knight');
-        $pieces[8] = array('color' => 'white', 'type' => 'rook');
+        $pieces[1] = array('color' => 'black', 'type' => 'rook');
+        $pieces[2] = array('color' => 'black', 'type' => 'knight');
+        $pieces[3] = array('color' => 'black', 'type' => 'bishop');
+        $pieces[4] = array('color' => 'black', 'type' => 'queen');
+        $pieces[5] = array('color' => 'black', 'type' => 'king');
+        $pieces[6] = array('color' => 'black', 'type' => 'bishop');
+        $pieces[7] = array('color' => 'black', 'type' => 'knight');
+        $pieces[8] = array('color' => 'black', 'type' => 'rook');
         for ($n = 9; $n <= 16; $n++) {
-            $pieces[$n] = array('color' => 'white', 'type' => 'pawn');
-        }
-        for ($n = 49; $n <= 56; $n++) {
             $pieces[$n] = array('color' => 'black', 'type' => 'pawn');
         }
-        $pieces[57] = array('color' => 'black', 'type' => 'rook');
-        $pieces[58] = array('color' => 'black', 'type' => 'knight');
-        $pieces[59] = array('color' => 'black', 'type' => 'bishop');
-        $pieces[60] = array('color' => 'black', 'type' => 'queen');
-        $pieces[61] = array('color' => 'black', 'type' => 'king');
-        $pieces[62] = array('color' => 'black', 'type' => 'bishop');
-        $pieces[63] = array('color' => 'black', 'type' => 'knight');
-        $pieces[64] = array('color' => 'black', 'type' => 'rook');
+        for ($n = 49; $n <= 56; $n++) {
+            $pieces[$n] = array('color' => 'white', 'type' => 'pawn');
+        }
+        $pieces[57] = array('color' => 'white', 'type' => 'rook');
+        $pieces[58] = array('color' => 'white', 'type' => 'knight');
+        $pieces[59] = array('color' => 'white', 'type' => 'bishop');
+        $pieces[60] = array('color' => 'white', 'type' => 'queen');
+        $pieces[61] = array('color' => 'white', 'type' => 'king');
+        $pieces[62] = array('color' => 'white', 'type' => 'bishop');
+        $pieces[63] = array('color' => 'white', 'type' => 'knight');
+        $pieces[64] = array('color' => 'white', 'type' => 'rook');
         $data['pieces'] = $pieces;
 
         $this->setData($data);
@@ -109,7 +111,13 @@ class GameState extends Model
             return array();
         }
 
-        return match ($pieces[$from]['type']) {
+        $piece = $pieces[$from];
+        $turn = $data['turn'] % 2 == 0 ? 'white' : 'black';
+        if ($turn != $piece['color']) {
+            return array();
+        }
+
+        return match ($piece['type']) {
             'king' => KingBehavior::getValidMoves($pieces, $from),
             'queen' => QueenBehavior::getValidMoves($pieces, $from),
             'rook' => RookBehavior::getValidMoves($pieces, $from),
