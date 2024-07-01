@@ -75,7 +75,7 @@ function click(position) {
     }).then(response => {
         let data = response.data;
         if (!data.success) {
-            // TODO: error notification?
+            // TODO: error notification
         }
         update(data.state);
     }).finally(() => {
@@ -87,6 +87,9 @@ function click(position) {
 }
 
 function update(state) {
+    if (state == null) {
+        return;
+    }
     select();
     pieces.value = state['pieces'];
     moves = state['moves'];

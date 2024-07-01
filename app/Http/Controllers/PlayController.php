@@ -41,8 +41,7 @@ class PlayController
         if (!$gameState instanceof GameState) {
             return response()->json([
                 'success' => false,
-                'error' => 'Invalid game state',
-                'state' => $gameState->getViewData()
+                'error' => 'Invalid game state'
             ]);
         }
         $gameState->reset();
@@ -58,10 +57,10 @@ class PlayController
         if (!$gameState instanceof GameState) {
             return response()->json([
                 'success' => false,
-                'error' => 'Invalid game state',
-                'state' => $gameState->getViewData()
+                'error' => 'Invalid game state'
             ]);
         }
+
         $parameters = $request->request->all();
         $from = $parameters['from'];
         $to = $parameters['to'];
@@ -72,6 +71,7 @@ class PlayController
                 'state' => $gameState->getViewData()
             ]);
         }
+
         $data = $gameState->getData();
         $data['pieces'][$to] = $data['pieces'][$from];
         unset($data['pieces'][$from]);
