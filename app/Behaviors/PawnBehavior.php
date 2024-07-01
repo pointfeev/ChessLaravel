@@ -29,8 +29,7 @@ class PawnBehavior extends PieceBehavior
             if (!empty($positions)) {
                 $position = $positions[0];
                 if (isset($pieces[$position])) {
-                    $pieceLeft = $pieces[$position];
-                    if ($color != $pieceLeft['color']) {
+                    if ($color != $pieces[$position]['color']) {
                         $moves[] = $position;
                     }
                 }
