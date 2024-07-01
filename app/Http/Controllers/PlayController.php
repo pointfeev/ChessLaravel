@@ -11,33 +11,16 @@ use Inertia\Response;
 
 class PlayController
 {
-    private function getGameState(bool $create = false): GameState|null
-    {
-        $gameState = null;
-
-        $uuid = Cookie::get('state');
-        if ($uuid !== null) {
-            $gameState = GameState::find($uuid);
-        }
-
-        if ($create && !$gameState instanceof GameState) {
-            $gameState = GameState::new();
-            Cookie::queue('state', $gameState->getKey());
-        }
-
-        return $gameState;
-    }
-
     public function index(): Response
     {
         return Inertia::render('Play', [
-            'state' => $this->getGameState(true)->getViewData()
+            'state' => GameState::get(true)->getViewData()
         ]);
     }
 
     public function reset(): JsonResponse
     {
-        $gameState = $this->getGameState();
+        $gameState = GameState::get();
         if (!$gameState instanceof GameState) {
             return response()->json([
                 'success' => false,
@@ -53,7 +36,7 @@ class PlayController
 
     public function move(Request $request): JsonResponse
     {
-        $gameState = $this->getGameState();
+        $gameState = GameState::get();
         if (!$gameState instanceof GameState) {
             return response()->json([
                 'success' => false,

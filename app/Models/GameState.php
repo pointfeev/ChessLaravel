@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cookie;
 
 class GameState extends Model
 {
@@ -26,6 +27,23 @@ class GameState extends Model
     {
         $gameState = new GameState();
         $gameState->reset();
+        return $gameState;
+    }
+
+    public static function get(bool $create = false): GameState|null
+    {
+        $gameState = null;
+
+        $uuid = Cookie::get('state');
+        if ($uuid !== null) {
+            $gameState = GameState::find($uuid);
+        }
+
+        if ($create && !$gameState instanceof GameState) {
+            $gameState = GameState::new();
+            Cookie::queue('state', $gameState->getKey());
+        }
+
         return $gameState;
     }
 
