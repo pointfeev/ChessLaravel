@@ -6,10 +6,10 @@ const container = ref(null);
 const boardSize = ref('150rem');
 
 function onResize() {
-    let div = container.value;
-    let width = div.clientWidth;
-    let height = div.clientHeight;
-    let size = Math.min(width, height, 2400);
+    const div = container.value;
+    const width = div.clientWidth;
+    const height = div.clientHeight;
+    const size = Math.min(width, height, 2400);
     boardSize.value = (size / 16).toString() + 'rem';
 }
 
@@ -27,20 +27,38 @@ let moves = state['moves'];
 
 let selection = null;
 let highlighted = null;
+const hinted = [];
 
 function select(position) {
     if (highlighted != null) {
         highlighted.classList.replace('square-even-selected', 'square-even');
         highlighted.classList.replace('square-odd-selected', 'square-odd');
     }
+    while (hinted.length > 0) {
+        const hint = hinted.pop();
+        hint.remove();
+    }
+
     selection = position;
     if (position == null) {
         highlighted = null;
         return;
     }
-    highlighted = container.value.querySelector('#squares :nth-child(' + position + ')')
+
+    highlighted = container.value.querySelector('#squares :nth-child(' + position + ')');
     highlighted.classList.replace('square-even', 'square-even-selected');
     highlighted.classList.replace('square-odd', 'square-odd-selected');
+
+    const validMoves = moves[position];
+    for (const key in validMoves) {
+        const movePosition = validMoves[key];
+        const square = container.value.querySelector('#squares :nth-child(' + movePosition + ')');
+        const piece = pieces.value[movePosition];
+        const hint = document.createElement('div');
+        hint.classList.add(piece != null ? 'capture-hint' : 'move-hint');
+        square.appendChild(hint);
+        hinted.push(hint);
+    }
 }
 
 let debounce = false;
@@ -49,18 +67,21 @@ function click(position) {
     if (debounce) {
         return;
     }
-    let piece = pieces.value[position];
+
+    const piece = pieces.value[position];
     if (selection == null) {
         if (piece != null) {
             select(position);
         }
         return;
     }
+
     if (selection === position) {
         select();
         return;
     }
-    let selectedPiece = pieces.value[selection];
+
+    const selectedPiece = pieces.value[selection];
     if (!moves[selection].includes(position)) {
         if (piece != null && piece.color === selectedPiece.color) {
             select(position);
@@ -68,12 +89,13 @@ function click(position) {
         }
         return;
     }
+
     debounce = true;
     axios.post(route('play.move'), {
         from: selection,
         to: position
     }).then(response => {
-        let data = response.data;
+        const data = response.data;
         if (!data.success) {
             // TODO: error notification
         }
@@ -81,6 +103,7 @@ function click(position) {
     }).finally(() => {
         debounce = false;
     });
+
     pieces.value[position] = selectedPiece;
     pieces.value[selection] = null;
     select();
@@ -90,6 +113,7 @@ function update(state) {
     if (state == null) {
         return;
     }
+
     select();
     pieces.value = state['pieces'];
     moves = state['moves'];
@@ -121,7 +145,7 @@ defineExpose({update});
     </div>
 </template>
 
-<style scoped>
+<style>
 #board {
     width: v-bind(boardSize);
     height: v-bind(boardSize);
@@ -141,5 +165,21 @@ defineExpose({update});
 
 .square-odd-selected {
     background-color: rgb(226 207 89);
+}
+
+.move-hint, .capture-hint {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.move-hint {
+    background-color: rgba(0, 0, 0, 0.15);
+    background-clip: content-box;
+    padding: 34%;
+}
+
+.capture-hint {
+    border: 3px solid rgba(0, 0, 0, 0.15);
 }
 </style>
