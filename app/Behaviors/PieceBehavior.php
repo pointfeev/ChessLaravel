@@ -4,6 +4,9 @@ namespace App\Behaviors;
 
 abstract class PieceBehavior
 {
+    public const WHITE_ID = 'w';
+    public const BLACK_ID = 'b';
+
     protected static function getXYFromPosition(int $from): array
     {
         $position = $from - 1;

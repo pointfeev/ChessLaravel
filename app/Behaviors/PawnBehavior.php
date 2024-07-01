@@ -4,6 +4,8 @@ namespace App\Behaviors;
 
 class PawnBehavior extends PieceBehavior
 {
+    public const ID = 'p';
+
     private const DIRECTIONS = [-1, 1];
 
     public static function getValidMoves(array $pieces, int $from): array
@@ -12,9 +14,9 @@ class PawnBehavior extends PieceBehavior
 
         list($fromX, $fromY) = self::getXYFromPosition($from);
         $color = $pieces[$from]['color'];
-        $dirY = $color == 'black' ? 1 : -1;
+        $dirY = $color == PieceBehavior::BLACK_ID ? 1 : -1;
 
-        $startY = $color == 'black' ? 1 : 6;
+        $startY = $color == PieceBehavior::BLACK_ID ? 1 : 6;
         $maxCount = $fromY == $startY ? 2 : 1;
         $positions = self::getPositionsInDirection($fromX, $fromY, 0, $dirY, $maxCount);
         foreach ($positions as $position) {

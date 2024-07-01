@@ -6,6 +6,7 @@ use App\Behaviors\BishopBehavior;
 use App\Behaviors\KingBehavior;
 use App\Behaviors\KnightBehavior;
 use App\Behaviors\PawnBehavior;
+use App\Behaviors\PieceBehavior;
 use App\Behaviors\QueenBehavior;
 use App\Behaviors\RookBehavior;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -54,28 +55,28 @@ class GameState extends Model
         $data['turn'] = 0;
 
         $pieces = array();
-        $pieces[1] = array('color' => 'black', 'type' => 'rook');
-        $pieces[2] = array('color' => 'black', 'type' => 'knight');
-        $pieces[3] = array('color' => 'black', 'type' => 'bishop');
-        $pieces[4] = array('color' => 'black', 'type' => 'queen');
-        $pieces[5] = array('color' => 'black', 'type' => 'king');
-        $pieces[6] = array('color' => 'black', 'type' => 'bishop');
-        $pieces[7] = array('color' => 'black', 'type' => 'knight');
-        $pieces[8] = array('color' => 'black', 'type' => 'rook');
+        $pieces[1] = array('color' => PieceBehavior::BLACK_ID, 'type' => RookBehavior::ID);
+        $pieces[2] = array('color' => PieceBehavior::BLACK_ID, 'type' => KnightBehavior::ID);
+        $pieces[3] = array('color' => PieceBehavior::BLACK_ID, 'type' => BishopBehavior::ID);
+        $pieces[4] = array('color' => PieceBehavior::BLACK_ID, 'type' => QueenBehavior::ID);
+        $pieces[5] = array('color' => PieceBehavior::BLACK_ID, 'type' => KingBehavior::ID);
+        $pieces[6] = array('color' => PieceBehavior::BLACK_ID, 'type' => BishopBehavior::ID);
+        $pieces[7] = array('color' => PieceBehavior::BLACK_ID, 'type' => KnightBehavior::ID);
+        $pieces[8] = array('color' => PieceBehavior::BLACK_ID, 'type' => RookBehavior::ID);
         for ($n = 9; $n <= 16; $n++) {
-            $pieces[$n] = array('color' => 'black', 'type' => 'pawn');
+            $pieces[$n] = array('color' => PieceBehavior::BLACK_ID, 'type' => PawnBehavior::ID);
         }
         for ($n = 49; $n <= 56; $n++) {
-            $pieces[$n] = array('color' => 'white', 'type' => 'pawn');
+            $pieces[$n] = array('color' => PieceBehavior::WHITE_ID, 'type' => PawnBehavior::ID);
         }
-        $pieces[57] = array('color' => 'white', 'type' => 'rook');
-        $pieces[58] = array('color' => 'white', 'type' => 'knight');
-        $pieces[59] = array('color' => 'white', 'type' => 'bishop');
-        $pieces[60] = array('color' => 'white', 'type' => 'queen');
-        $pieces[61] = array('color' => 'white', 'type' => 'king');
-        $pieces[62] = array('color' => 'white', 'type' => 'bishop');
-        $pieces[63] = array('color' => 'white', 'type' => 'knight');
-        $pieces[64] = array('color' => 'white', 'type' => 'rook');
+        $pieces[57] = array('color' => PieceBehavior::WHITE_ID, 'type' => RookBehavior::ID);
+        $pieces[58] = array('color' => PieceBehavior::WHITE_ID, 'type' => KnightBehavior::ID);
+        $pieces[59] = array('color' => PieceBehavior::WHITE_ID, 'type' => BishopBehavior::ID);
+        $pieces[60] = array('color' => PieceBehavior::WHITE_ID, 'type' => QueenBehavior::ID);
+        $pieces[61] = array('color' => PieceBehavior::WHITE_ID, 'type' => KingBehavior::ID);
+        $pieces[62] = array('color' => PieceBehavior::WHITE_ID, 'type' => BishopBehavior::ID);
+        $pieces[63] = array('color' => PieceBehavior::WHITE_ID, 'type' => KnightBehavior::ID);
+        $pieces[64] = array('color' => PieceBehavior::WHITE_ID, 'type' => RookBehavior::ID);
         $data['pieces'] = $pieces;
 
         $this->setData($data);
@@ -112,18 +113,18 @@ class GameState extends Model
         }
 
         $piece = $pieces[$from];
-        $turn = $data['turn'] % 2 == 0 ? 'white' : 'black';
+        $turn = $data['turn'] % 2 == 0 ? PieceBehavior::WHITE_ID : PieceBehavior::BLACK_ID;
         if ($turn != $piece['color']) {
             return array();
         }
 
         return match ($piece['type']) {
-            'king' => KingBehavior::getValidMoves($pieces, $from),
-            'queen' => QueenBehavior::getValidMoves($pieces, $from),
-            'rook' => RookBehavior::getValidMoves($pieces, $from),
-            'bishop' => BishopBehavior::getValidMoves($pieces, $from),
-            'knight' => KnightBehavior::getValidMoves($pieces, $from),
-            'pawn' => PawnBehavior::getValidMoves($pieces, $from),
+            KingBehavior::ID => KingBehavior::getValidMoves($pieces, $from),
+            QueenBehavior::ID => QueenBehavior::getValidMoves($pieces, $from),
+            RookBehavior::ID => RookBehavior::getValidMoves($pieces, $from),
+            BishopBehavior::ID => BishopBehavior::getValidMoves($pieces, $from),
+            KnightBehavior::ID => KnightBehavior::getValidMoves($pieces, $from),
+            PawnBehavior::ID => PawnBehavior::getValidMoves($pieces, $from),
             default => array()
         };
     }
