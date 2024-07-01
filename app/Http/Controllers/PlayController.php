@@ -27,7 +27,8 @@ class PlayController
                 'error' => 'Invalid game state'
             ]);
         }
-        $gameState->reset();
+
+        $gameState->resetData();
         return response()->json([
             'success' => true,
             'state' => $gameState->getViewData()

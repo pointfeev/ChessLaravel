@@ -31,6 +31,7 @@ function reset() {
             <NavLink :href="route('welcome')">Back</NavLink>
             <NavLink href='#' onclick='return false' @click='reset'>Reset</NavLink>
         </template>
+
         <Board ref='board' :state='state'/>
     </Layout>
 </template>

@@ -129,6 +129,7 @@ defineExpose({update});
                 <div v-for='p in 64'
                      :class="p % 2 === Math.ceil(p / 8) % 2 ? 'square-even' : 'square-odd'"/>
             </div>
+
             <div v-if='pieces' id='pieces' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
                 <!--
                     TODO: convert iteration to (item, index) in items

@@ -13,23 +13,6 @@ class GameState extends Model
     protected $table = 'state';
     protected $primaryKey = 'uuid';
 
-    public function getData(): array
-    {
-        return json_decode($this->getAttribute('data'), true);
-    }
-
-    public function setData($data): void
-    {
-        $this->setAttribute('data', json_encode($data))->save();
-    }
-
-    public static function new(): GameState
-    {
-        $gameState = new GameState();
-        $gameState->reset();
-        return $gameState;
-    }
-
     public static function get(bool $create = false): GameState|null
     {
         $gameState = null;
@@ -40,14 +23,25 @@ class GameState extends Model
         }
 
         if ($create && !$gameState instanceof GameState) {
-            $gameState = GameState::new();
+            $gameState = new GameState();
+            $gameState->resetData();
             Cookie::queue('state', $gameState->getKey());
         }
 
         return $gameState;
     }
 
-    public function reset(): void
+    public function getData(): array
+    {
+        return json_decode($this->getAttribute('data'), true);
+    }
+
+    public function setData($data): void
+    {
+        $this->setAttribute('data', json_encode($data))->save();
+    }
+
+    public function resetData(): void
     {
         $data = array();
 
@@ -101,7 +95,7 @@ class GameState extends Model
         return $moves;
     }
 
-    public function getValidMoves(int $from): array
+    private function getValidMoves(int $from): array
     {
         $moves = array();
 
