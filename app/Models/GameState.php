@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Behaviors\PawnBehavior;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cookie;
@@ -86,7 +87,7 @@ class GameState extends Model
         return in_array($to, $moves);
     }
 
-    public function getAllValidMoves(): array
+    private function getAllValidMoves(): array
     {
         $moves = array();
         for ($p = 1; $p <= 64; $p++) {
@@ -97,41 +98,25 @@ class GameState extends Model
 
     private function getValidMoves(int $from): array
     {
-        $moves = array();
-
         $data = $this->getData();
         $pieces = $data['pieces'];
         if (!isset($pieces[$from])) {
-            return $moves;
+            return array();
         }
 
         switch ($pieces[$from]['type']) {
             case 'king':
-                // TODO
-                break;
+                return array(); // TODO
             case 'queen':
-                // TODO
-                break;
+                return array(); // TODO
             case 'rook':
-                // TODO
-                break;
+                return array(); // TODO
             case 'bishop':
-                // TODO
-                break;
+                return array(); // TODO
             case 'knight':
-                // TODO
-                break;
+                return array(); // TODO
             case 'pawn':
-                // TODO
-                break;
+                return PawnBehavior::getValidMoves($pieces, $from);
         }
-
-        for ($p = 1; $p <= 64; $p++) { // TODO: temporary for testing, remove
-            if (!isset($pieces[$p]) || $pieces[$p]['color'] != $pieces[$from]['color']) {
-                $moves[] = $p;
-            }
-        }
-
-        return $moves;
     }
 }
