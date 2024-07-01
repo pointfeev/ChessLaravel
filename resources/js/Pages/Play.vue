@@ -8,7 +8,11 @@ defineProps(['state']);
 const board = ref(null);
 
 let debounce = false;
+
 function reset() {
+    if (debounce) {
+        return;
+    }
     debounce = true;
     axios.post(route('play.reset')).then(response => {
         let data = response.data;
