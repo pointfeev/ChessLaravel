@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Behaviors\BishopBehavior;
+use App\Behaviors\KingBehavior;
+use App\Behaviors\KnightBehavior;
 use App\Behaviors\PawnBehavior;
+use App\Behaviors\QueenBehavior;
+use App\Behaviors\RookBehavior;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cookie;
@@ -105,11 +110,11 @@ class GameState extends Model
         }
 
         return match ($pieces[$from]['type']) {
-            'king' => array(), // TODO
-            'queen' => array(), // TODO
-            'rook' => array(), // TODO
-            'bishop' => array(), // TODO
-            'knight' => array(), // TODO
+            'king' => KingBehavior::getValidMoves($pieces, $from),
+            'queen' => QueenBehavior::getValidMoves($pieces, $from),
+            'rook' => RookBehavior::getValidMoves($pieces, $from),
+            'bishop' => BishopBehavior::getValidMoves($pieces, $from),
+            'knight' => KnightBehavior::getValidMoves($pieces, $from),
             'pawn' => PawnBehavior::getValidMoves($pieces, $from),
             default => array()
         };

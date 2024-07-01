@@ -4,6 +4,8 @@ namespace App\Behaviors;
 
 class PawnBehavior extends PieceBehavior
 {
+    private const DIRECTIONS = [-1, 1];
+
     public static function getValidMoves(array $pieces, int $from): array
     {
         $moves = array();
@@ -22,8 +24,7 @@ class PawnBehavior extends PieceBehavior
             $moves[] = $position;
         }
 
-        $directions = array(-1, 1);
-        foreach ($directions as $dirX) {
+        foreach (self::DIRECTIONS as $dirX) {
             $positions = self::getPositionsInDirection($fromX, $fromY, $dirX, $dirY, 1);
             if (!empty($positions)) {
                 $position = $positions[0];

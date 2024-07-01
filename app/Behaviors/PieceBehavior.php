@@ -32,5 +32,29 @@ abstract class PieceBehavior
         return $positions;
     }
 
+    protected static function getValidMovesInDirections(array $pieces, int $from, array $directions, int $maxCount): array
+    {
+        $moves = array();
+
+        list($fromX, $fromY) = self::getXYFromPosition($from);
+        $color = $pieces[$from]['color'];
+        foreach ($directions as $direction) {
+            $dirX = $direction[0];
+            $dirY = $direction[1];
+            $positions = self::getPositionsInDirection($fromX, $fromY, $dirX, $dirY, $maxCount);
+            foreach ($positions as $position) {
+                if (isset($pieces[$position])) {
+                    if ($color != $pieces[$position]['color']) {
+                        $moves[] = $position;
+                    }
+                    break;
+                }
+                $moves[] = $position;
+            }
+        }
+
+        return $moves;
+    }
+
     abstract public static function getValidMoves(array $pieces, int $from): array;
 }
