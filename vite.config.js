@@ -16,10 +16,5 @@ export default defineConfig({
                 },
             },
         }),
-    ],
-    build: {
-        watch: {
-            include: '**',
-        },
-    },
+    ]
 });
