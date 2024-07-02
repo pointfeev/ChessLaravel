@@ -99,7 +99,7 @@ function click(position) {
         if (!data.success) {
             // TODO: error notification
         }
-        update(data.state);
+        emit('update', data.state);
     }).finally(() => {
         debounce = false;
     });
@@ -110,15 +110,12 @@ function click(position) {
 }
 
 function update(state) {
-    if (state == null) {
-        return;
-    }
-
     select();
     pieces.value = state['pieces'];
     moves = state['moves'];
 }
 
+const emit = defineEmits(['update']);
 defineExpose({update});
 </script>
 
