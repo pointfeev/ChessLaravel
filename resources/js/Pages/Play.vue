@@ -5,8 +5,9 @@ import NavLink from '@/Components/Layout/NavLink.vue';
 import Board from '@/Components/Chess/Board.vue';
 import TurnDisplay from '@/Components/Chess/TurnDisplay.vue';
 
-const {state} = defineProps(['state']);
 const board = ref(null);
+
+const {state} = defineProps(['state']);
 const turn = ref(state['turn']);
 
 let debounce = false;
@@ -31,7 +32,6 @@ function update(state) {
     if (state == null) {
         return;
     }
-
     turn.value = state['turn'];
     board.value.update(state);
 }

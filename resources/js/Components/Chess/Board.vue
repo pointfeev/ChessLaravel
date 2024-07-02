@@ -60,6 +60,7 @@ function select(position) {
         const movePosition = validMoves[key];
         const square = container.value.querySelector('#squares :nth-child(' + movePosition + ')');
         const piece = pieces.value[movePosition];
+
         const hint = document.createElement('div');
         hint.classList.add(piece != null ? 'capture-hint' : 'move-hint');
         square.appendChild(hint);
@@ -108,16 +109,17 @@ function click(position) {
     pieces.value[position] = pieces.value[selection];
     pieces.value[selection] = null;
     turn++;
+
     state['pieces'] = pieces.value;
     state['turn'] = turn;
     emit('update', state);
 }
 
 function update(state) {
-    select();
     pieces.value = state['pieces'];
     moves = state['moves'];
     turn = state['turn'];
+    select();
 }
 
 const emit = defineEmits(['update']);
