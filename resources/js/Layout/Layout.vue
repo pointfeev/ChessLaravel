@@ -10,7 +10,7 @@ defineProps(['title']);
     <div class='w-screen h-screen flex flex-col'
          v-bind='$attrs' v-on='$listeners'>
         <header v-if='$slots.header'
-                class='flex-initial p-4 flex gap-2 items-center border-b border-slate-200/10 shadow'>
+                class='flex-initial p-4 flex gap-4 items-center border-b border-slate-200/10 shadow'>
             <slot name='header'/>
         </header>
 

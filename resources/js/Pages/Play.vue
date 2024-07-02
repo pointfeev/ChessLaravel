@@ -41,11 +41,11 @@ function update(state) {
     <Layout title='Play'>
         <template v-slot:header>
             <NavLink :href="route('welcome')">Back</NavLink>
-            <NavLink href='#' onclick='return false' @click='reset'>Reset</NavLink>
 
             <div class='flex-auto'></div>
 
             <TurnDisplay :turn='turn'/>
+            <NavLink href='#' onclick='return false' @click='reset'>Reset</NavLink>
         </template>
 
         <Board ref='board' :state='state' @update='update'/>
