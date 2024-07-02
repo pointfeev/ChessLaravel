@@ -128,7 +128,8 @@ defineExpose({update});
 
 <template>
     <div ref='container' class='relative w-full h-full select-none'>
-        <div v-if="boardSize !== '0rem'" id='board' class='absolute rounded shadow overflow-hidden'>
+        <div v-if="boardSize !== '0rem'" id='board'
+             class='absolute left-1/2 transform -translate-x-1/2 rounded shadow overflow-hidden'>
             <div id='squares' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
                 <div v-for='p in 64'
                      :class="p % 2 === Math.ceil(p / 8) % 2 ? 'square-even' : 'square-odd'"/>
