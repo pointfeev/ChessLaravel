@@ -8,7 +8,3 @@ const {turn} = defineProps(['turn']);
         <span>{{ turn % 2 === 0 ? 'White' : 'Black' }}</span>
     </div>
 </template>
-
-<style scoped>
-
-</style>
