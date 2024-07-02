@@ -24,6 +24,7 @@ onUnmounted(() => {
 const {state} = defineProps(['state']);
 const pieces = ref(state['pieces']);
 let moves = state['moves'];
+let turn = state['turn'];
 
 let selection = null;
 let highlighted = null;
@@ -106,13 +107,17 @@ function click(position) {
 
     pieces.value[position] = pieces.value[selection];
     pieces.value[selection] = null;
-    select();
+    turn++;
+    state['pieces'] = pieces.value;
+    state['turn'] = turn;
+    emit('update', state);
 }
 
 function update(state) {
     select();
     pieces.value = state['pieces'];
     moves = state['moves'];
+    turn = state['turn'];
 }
 
 const emit = defineEmits(['update']);
