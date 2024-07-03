@@ -31,6 +31,7 @@ let highlighted = null;
 const hinted = [];
 
 function select(position) {
+    selection = null;
     if (highlighted != null) {
         highlighted.classList.replace('square-even-selected', 'square-even');
         highlighted.classList.replace('square-odd-selected', 'square-odd');
@@ -41,16 +42,15 @@ function select(position) {
         hint.remove();
     }
 
-    selection = position;
     if (position == null) {
         return;
     }
-
     const validMoves = moves[position];
     if (validMoves == null || validMoves.length < 1) {
-        selection = null;
         return;
     }
+
+    selection = position;
 
     highlighted = container.value.querySelector('#squares :nth-child(' + position + ')');
     highlighted.classList.replace('square-even', 'square-even-selected');
@@ -75,19 +75,12 @@ function click(position) {
         return;
     }
 
-    if (selection == null) {
-        if (pieces.value[position] != null) {
-            select(position);
-        }
-        return;
-    }
-
     if (selection === position) {
         select();
         return;
     }
 
-    if (!moves[selection].includes(position)) {
+    if (selection == null || !moves[selection].includes(position)) {
         select(position);
         return;
     }
