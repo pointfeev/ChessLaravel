@@ -3,6 +3,7 @@ import {ref, onMounted, onUnmounted} from 'vue';
 import Piece from '@/Components/Chess/Piece.vue';
 
 const container = ref(null);
+
 const boardSize = ref('150rem');
 
 function onResize() {
@@ -25,6 +26,16 @@ const {state} = defineProps(['state']);
 const pieces = ref(state['pieces']);
 let moves = state['moves'];
 let turn = state['turn'];
+
+function update(state) {
+    pieces.value = state['pieces'];
+    moves = state['moves'];
+    turn = state['turn'];
+    select();
+}
+
+const emit = defineEmits(['update']);
+defineExpose({update});
 
 let selection = null;
 let highlighted = null;
@@ -68,13 +79,7 @@ function select(position) {
     }
 }
 
-let debounce = false;
-
 function click(position) {
-    if (debounce) {
-        return;
-    }
-
     if (selection === position) {
         select();
         return;
@@ -85,10 +90,28 @@ function click(position) {
         return;
     }
 
+    move(selection, position);
+}
+
+let debounce = false;
+
+function move(from, to) {
+    if (debounce) {
+        return;
+    }
     debounce = true;
+
+    pieces.value[to] = pieces.value[from];
+    pieces.value[from] = null;
+    turn++;
+
+    state['pieces'] = pieces.value;
+    state['turn'] = turn;
+    emit('update', state);
+
     axios.post(route('play.move'), {
-        from: selection,
-        to: position
+        from: from,
+        to: to
     }).then(response => {
         const data = response.data;
         if (!data.success) {
@@ -98,47 +121,19 @@ function click(position) {
     }).finally(() => {
         debounce = false;
     });
-
-    pieces.value[position] = pieces.value[selection];
-    pieces.value[selection] = null;
-    turn++;
-
-    state['pieces'] = pieces.value;
-    state['turn'] = turn;
-    emit('update', state);
 }
-
-function update(state) {
-    pieces.value = state['pieces'];
-    moves = state['moves'];
-    turn = state['turn'];
-    select();
-}
-
-const emit = defineEmits(['update']);
-defineExpose({update});
 </script>
 
 <template>
     <div ref='container' class='relative w-full h-full select-none'>
         <div v-if="boardSize !== '0rem'" id='board'
              class='absolute left-1/2 transform -translate-x-1/2 rounded shadow overflow-hidden'>
-            <div id='squares' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
-                <div v-for='p in 64'
-                     :class="p % 2 === Math.ceil(p / 8) % 2 ? 'square-even' : 'square-odd'"/>
-            </div>
-
-            <div v-if='pieces' id='pieces' class='absolute w-full h-full grid grid-cols-8 grid-rows-8'>
-                <!--
-                    TODO: convert iteration to (item, index) in items
-                          and figure out how to position them manually
-                          as to allow dragging?
-                 -->
-                <template v-for='p in 64' :key='p'>
-                    <Piece v-if='pieces[p]' :color='pieces[p].color' :type='pieces[p].type'
-                           @dragstart.prevent @click='click(p)'/>
-                    <div v-else @click='click(p)'/>
-                </template>
+            <div id='squares' class='w-full h-full grid grid-cols-8 grid-rows-8'>
+                <div v-for='p in 64' class='relative'
+                     :class="p % 2 === Math.ceil(p / 8) % 2 ? 'square-even' : 'square-odd'"
+                     @dragstart.prevent @click='click(p)'>
+                    <Piece v-if='pieces[p]' :color='pieces[p].color' :type='pieces[p].type'/>
+                </div>
             </div>
         </div>
     </div>
@@ -167,6 +162,9 @@ defineExpose({update});
 }
 
 .move-hint, .capture-hint {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     border-radius: 50%;
