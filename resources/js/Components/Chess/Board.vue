@@ -42,6 +42,10 @@ let highlighted = null;
 const hinted = [];
 
 function select(position) {
+    if (selection === position) {
+        return;
+    }
+
     selection = null;
     if (highlighted != null) {
         highlighted.classList.replace('square-even-selected', 'square-even');
@@ -93,6 +97,25 @@ function click(position) {
     move(selection, position);
 }
 
+function drag(position, event) {
+    const validMoves = moves[position];
+    if (validMoves == null || validMoves.length < 1) {
+        event.preventDefault();
+        select();
+        return;
+    }
+
+    select(position);
+}
+
+function drop(position) {
+    if (selection == null || selection === position || !moves[selection].includes(position)) {
+        return;
+    }
+
+    move(selection, position);
+}
+
 let debounce = false;
 
 function move(from, to) {
@@ -117,6 +140,7 @@ function move(from, to) {
         if (!data.success) {
             // TODO: error notification
         }
+
         emit('update', data.state);
     }).finally(() => {
         debounce = false;
@@ -131,7 +155,8 @@ function move(from, to) {
             <div id='squares' class='w-full h-full grid grid-cols-8 grid-rows-8'>
                 <div v-for='p in 64' class='relative'
                      :class="p % 2 === Math.ceil(p / 8) % 2 ? 'square-even' : 'square-odd'"
-                     @dragstart.prevent @click='click(p)'>
+                     @click='click(p)' @dragstart='drag(p, $event)' @drop='drop(p)'
+                     @dragenter.prevent @dragover.prevent>
                     <Piece v-if='pieces[p]' :color='pieces[p].color' :type='pieces[p].type'/>
                 </div>
             </div>
@@ -167,6 +192,7 @@ function move(from, to) {
     left: 0;
     width: 100%;
     height: 100%;
+    pointer-events: none;
     border-radius: 50%;
 }
 
