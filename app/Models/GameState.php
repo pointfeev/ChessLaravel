@@ -12,6 +12,7 @@ use App\Behaviors\RookBehavior;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 
 class GameState extends Model
 {
@@ -127,5 +128,15 @@ class GameState extends Model
             PawnBehavior::ID => PawnBehavior::getValidMoves($pieces, $from),
             default => array()
         };
+    }
+
+    public static function clean(): void
+    {
+        $expireDate = now();
+        $expireDate->subDays(30);
+
+        DB::table('state')
+            ->where(self::UPDATED_AT, '<', $expireDate)
+            ->delete();
     }
 }
