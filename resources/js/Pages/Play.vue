@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue';
-import Layout from '@/Layout/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import NavLink from '@/Components/Layout/NavLink.vue';
 import Board from '@/Components/Chess/Board.vue';
 import TurnDisplay from '@/Components/Chess/TurnDisplay.vue';

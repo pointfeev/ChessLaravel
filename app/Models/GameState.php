@@ -32,7 +32,7 @@ class GameState extends Model
         if ($create && !$gameState instanceof GameState) {
             $gameState = new GameState();
             $gameState->resetData();
-            Cookie::queue('state', $gameState->getKey());
+            Cookie::queue(Cookie::forever('state', $gameState->getKey(), null, null, true));
         }
 
         return $gameState;

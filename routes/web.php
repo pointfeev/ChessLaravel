@@ -20,5 +20,5 @@ Route::controller(PlayController::class)
     });
 
 Route::fallback(function () {
-    return redirect()->route('welcome');
+    return redirect(route('welcome', absolute: false));
 });

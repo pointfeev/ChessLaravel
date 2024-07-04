@@ -1,5 +1,5 @@
 <script setup>
-import Layout from '@/Layout/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import NavLink from '@/Components/Layout/NavLink.vue';
 </script>
 
