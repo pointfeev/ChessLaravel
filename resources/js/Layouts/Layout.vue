@@ -18,7 +18,8 @@ defineProps(['title']);
             <slot/>
         </main>
 
-        <footer v-if='$slots.footer' class='flex-initial p-4'>
+        <footer v-if='$slots.footer'
+                class='flex-initial p-4 flex gap-4 items-center border-t border-slate-200/10 shadow'>
             <slot name='footer'/>
         </footer>
     </div>

@@ -23,6 +23,7 @@ function reset() {
         if (!data.success) {
             // TODO: error notification
         }
+
         update(data.state);
         debounce = false;
     })
@@ -32,6 +33,7 @@ function update(state) {
     if (state == null) {
         return;
     }
+
     turn.value = state['turn'];
     board.value.update(state);
 }
